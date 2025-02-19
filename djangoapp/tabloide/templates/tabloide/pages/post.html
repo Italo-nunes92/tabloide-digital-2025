@@ -1,0 +1,82 @@
+{% extends 'tabloide/base.html' %} 
+
+{% block content %}
+<main class="main-content single-post section-wrapper">
+  <div class="single-post-content section-content-narrow">
+    <div class="single-post-gap section-gap">
+      {% if post.tags.exists %}
+      
+      {% endif %}
+      <div class="single-post-cover pb-base" >
+        <img  loading="lazy" src={{img_v}} alt="Change me" >
+      </div>
+      <div class="post-meta pb-base">
+        <div class="post-meta-item">
+          <a 
+            class="post-meta-link" 
+            href="{% url 'tabloide:created_by' post.created_by.pk  %}"
+          >
+            <i class="fa-solid fa-user"></i>
+            <span>
+              {% if post.created_by.first_name %}
+                {{ post.created_by.first_name }} 
+                {{ post.created_by.last_name }}
+              {% else %}
+                {{ post.created_by.username }}
+              {% endif %}
+            </span>
+          </a>
+        </div>
+        <div class="post-meta-item">
+          <span class="post-meta-link">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span>
+              {{ post.updated_at | date:'d/m/Y \à\s H:i' }}
+            </span>
+          </span>
+        </div>
+
+        {% if post.category %}
+          <div class="post-meta-item">
+            <a 
+              class="post-meta-link" 
+              href="{% url 'tabloide:category' post.category.slug  %}"
+            >
+              <i class="fa-solid fa-tag"></i>
+              <span>
+                {{ post.category.name }}
+              </span>
+            </a>
+          </div>
+        {% endif %}
+      
+      </div>
+      
+      <h2 class="single-post-title pb-base center">
+        {{title_v}}
+      </h2>
+
+      {{post.content|safe}}
+
+      <div class="separator"></div>
+      
+
+      <div class="jm_novo">
+        {{description_v|safe}}        
+      
+      </div>
+      <div class="post-tags">
+        <span>Tags: </span>
+        {% for tag in post.tags.all %}
+          <a class="post-tag-link" href="{% url 'tabloide:tag' tag.slug %}">
+            <i class="fa-solid fa-circle-right"></i>
+            <span>{{ tag.name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    
+    </div>
+  </div>
+</main>
+
+{% endblock content %}
