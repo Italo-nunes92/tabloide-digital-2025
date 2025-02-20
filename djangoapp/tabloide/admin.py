@@ -1,5 +1,5 @@
 from django.contrib import admin
-from tabloide.models import Tag, Category, Page, Post
+from tabloide.models import Tag, Category, Page, Product, Store
 from django_summernote.admin import SummernoteModelAdmin
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -43,23 +43,22 @@ class PageAdmin(SummernoteModelAdmin):
     }
     
 
-@admin.register(Post)
-class PostAdmin(SummernoteModelAdmin):
+@admin.register(Product)
+class ProductAdmin(SummernoteModelAdmin):
     summernote_fields = 'content',
-    list_display = 'id', 'title', 'slug', 'is_published', 'created_by', 
-    list_display_links = 'title',
-    search_fields = 'id', 'title', 'slug', 'content', 'excerpt','cover',
+    list_display = 'pk', 'Nome do Produto', 'Preço Por:', 'Validade da oferta', 'is_published',
+    list_display_links = 'Nome do Produto',
+    search_fields = 'pk', 'title', 'new_price', 'Validade da oferta', 'is_published',
     list_per_page = 50
-    list_filter = 'is_published', 'category',
-    list_editable = 'is_published',
-    ordering = '-id',
+    list_filter = 'is_published', 'Categoria',
+    list_editable = 'is_published', 'Validade da oferta',
+    ordering = 'Validade da oferta',
     prepopulated_fields = {
-        'slug': ('title',)
+        'slug': ('Nome do Produto',)
     }
     readonly_fields = 'created_at', 'updated_at','updated_by','created_by','link',
-
-        
-    autocomplete_fields = 'tags', 'category',
+    autocomplete_fields = 'tags', 'Categoria',
+    
     
     def link(self, obj):
         if not obj.pk:
@@ -71,10 +70,19 @@ class PostAdmin(SummernoteModelAdmin):
         return link
  
     def save_model(self, request, obj, form, change):
+        print()
+        
         if change:
             obj.updated_by = request.user
         else:
             obj.created_by = request.user
-            
+
         obj.save()
-    
+        
+@admin.register(Store)
+class StoreAdmin(admin.ModelAdmin):
+    list_display = 'id','number_store', 'title', 'phone_number','store_manager',
+    list_display_links = 'title',
+    search_fields = 'id','number_store', 'title', 'phone_number','store_manager',
+    list_per_page = 40
+    ordering = '-pk',

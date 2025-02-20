@@ -1,11 +1,12 @@
 
 from django.db import models
 from utils.rands import slygify_new
-from django.contrib.auth.models import User
 from utils.images import resize_image
+from utils.scraper import scrape_product
+from django.contrib.auth.models import User
 from django_summernote.models import AbstractAttachment
 from django.urls import reverse
-
+from django.core.exceptions import ValidationError
 
 
 class PostAttachment(AbstractAttachment):
@@ -100,110 +101,48 @@ class PostManager(models.Manager):
             .filter(is_published=True)\
             .order_by('-pk')
             
-class Post(models.Model):
-    class Meta:
-        verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
-        
-    objects = PostManager()
-    
-    title = models.CharField(max_length=50)
-    slug = models.SlugField(
-        max_length=50,
-        unique=True,
-        default="",
-        blank=True,
-        null=False,
-    )
-    
-    excerpt = models.CharField(max_length=150)
-    vitrine_link = models.URLField(blank=True, default='', null=True, max_length=255)
-    is_published = models.BooleanField(
-        default=True,
-        help_text='Esse campo deve ser marcado para tornar o post publico',
-    )
-    content = models.TextField()
-    cover = models.ImageField(upload_to='posts/%Y/%m/', blank=True, default='')
-    cover_in_post_content = models.BooleanField(
-        default=True,
-        help_text='Exibir a capa dentro do post?',
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True, blank=True,
-        related_name='post_created_by',
-    )
-    updated_at = models.DateTimeField(auto_now=True)
-    updated_by = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        null=True, blank=True,
-        related_name='post_updated_by',
-    )
-    category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True, default=None,
-    )
-    tags = models.ManyToManyField(Tag, blank=True, default='')
-    
-    def get_absolute_url(self):
-        if not self.is_published:
-            return reverse("tabloide:index")
-        
-        return reverse("tabloide:post", args=(self.slug,))
-    
-    def whatsapp(self):
-        number = '5517996753874'
-        
-        text = f"Estou interessado no produto {self.title}."
-        
-        link = f"https://wa.me/{number}?text={text.replace(' ', '%20')}"
-        return link
-    
-    def __str__(self):
-        return self.title
-    
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slygify_new(self.title, 5)
-
-        corrent_cover_name = str(self.cover.name)
-        super_save = super().save(*args, **kwargs)
-        cover_changed = False
-        if corrent_cover_name != self.cover.name:
-            cover_changed = True
-        if cover_changed: resize_image(self.cover, 900)  
-        return super_save
-    
 class Product(models.Model):
     class Meta:
-        verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
+        verbose_name = 'Produto'
+        verbose_name_plural = 'Produtos'
         
     objects = PostManager()
-    
-    title = models.CharField(max_length=50)
+    pk = models.IntegerField(
+        verbose_name='Código',
+        name='Código',
+        primary_key=True,
+        unique=True,
+        editable=True,
+        serialize=False,
+        blank=False,
+        null=False,
+        default=None,
+    )
+    title = models.CharField(max_length=50, name='Nome do Produto', verbose_name='Produto')
     slug = models.SlugField(
         max_length=50,
         unique=True,
         default="",
-        blank=True,
+        blank=False,
         null=False,
     )
-    
-    excerpt = models.CharField(max_length=150)
+    excerpt = models.CharField(max_length=150, name='Descrição curta', verbose_name='Descrição curta')
+    cover = models.URLField(max_length=255, blank=True, null=True, default='')
     vitrine_link = models.URLField(blank=True, default='', null=True, max_length=255)
     is_published = models.BooleanField(
         default=True,
         help_text='Esse campo deve ser marcado para tornar o post publico',
     )
-    content = models.TextField()
-    cover = models.ImageField(upload_to='posts/%Y/%m/', blank=True, default='')
-    cover_in_post_content = models.BooleanField(
-        default=True,
-        help_text='Exibir a capa dentro do post?',
+    old_price = models.FloatField(name='Preço De:', verbose_name='Preço De:')
+    new_price = models.FloatField(name='Preço Por:', verbose_name='Preço Por:')    
+    offer_validity = models.DateField(
+        name='Validade da oferta',
+        verbose_name='Validade da oferta',
+        blank=True,
+        null=True,
+        editable=True,
     )
+    
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         User,
@@ -220,8 +159,18 @@ class Product(models.Model):
     )
     category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, null=True, blank=True, default=None,
+        name='Categoria', verbose_name='Categoria'
     )
     tags = models.ManyToManyField(Tag, blank=True, default='')
+    
+    def installment_price(self):
+        return round(self.new_price / 10, 2)
+    
+    def percemtage_discount(self):
+        return round(100 - (self.new_price / self.old_price * 100), 2)
+    
+    def fees(self):
+        return round(self.installment_price() * 12)
     
     def get_absolute_url(self):
         if not self.is_published:
@@ -229,10 +178,44 @@ class Product(models.Model):
         
         return reverse("tabloide:post", args=(self.slug,))
     
-    def whatsapp(self):
-        number = '5517996753874'
-        
-        text = f"Estou interessado no produto {self.title}."
+    def __str__(self):
+        return self.title
+    
+    def clean(self):
+        if not self._state.adding and self.pk != self.__original_pk:
+            raise ValidationError({'Código': 'O valor do Código não pode ser alterado após a criação.'})
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__original_pk = self.pk
+    
+    def save(self, *args, **kwargs):
+        self.clean()
+        self.cover = scrape_product(self.vitrine_link).get('img')
+
+        if not self.slug:
+            self.slug = slygify_new(self.title, 5)
+   
+        super_save = super().save(*args, **kwargs)
+        return super_save
+    
+class Store(models.Model):
+    class Meta:
+        verbose_name = 'Loja'
+        verbose_name_plural = 'Lojas'
+
+    objects = PostManager()
+    number_store = models.IntegerField(verbose_name='Numero da Loja')
+    title = models.CharField(max_length=50, verbose_name='Nome da Loja')
+    phone_number = models.IntegerField(verbose_name='WhatsApp')
+    text = models.TextField(max_length=255, verbose_name='Mensagem WhatsApp', blank=True, null=True, default='Estou interessado no produto: ')
+    store_manager = models.CharField(max_length=100, verbose_name='Gerente')
+    
+    def whatsapp(self, text = None):
+        number = f'55{str(self.phone_number)}'
+                
+        if text is None: text = f"Estou interessado no produto {self.title}."
+        else: text = f"{text} {self.title}. "
         
         link = f"https://wa.me/{number}?text={text.replace(' ', '%20')}"
         return link
@@ -240,14 +223,3 @@ class Product(models.Model):
     def __str__(self):
         return self.title
     
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slygify_new(self.title, 5)
-
-        corrent_cover_name = str(self.cover.name)
-        super_save = super().save(*args, **kwargs)
-        cover_changed = False
-        if corrent_cover_name != self.cover.name:
-            cover_changed = True
-        if cover_changed: resize_image(self.cover, 900)  
-        return super_save

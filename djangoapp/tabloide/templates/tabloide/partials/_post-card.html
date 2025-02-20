@@ -5,8 +5,8 @@
           <img 
             class="card-cover"
             loading="lazy"
-            src={{post.cover.url}} 
-            alt="Conver do post {{post.title}}"
+            src={{post.cover}} 
+            alt="Foto {{post.title}}"
           >
         </a>
       </div>
@@ -23,8 +23,14 @@
   
       <div class="card-content-wrapper">
         <p class="card-content">
-          {{post.excerpt}}
+          {{post.excerpt}}        
         </p>
+        <p>{{post.old_price}}</p>
+        <p>{{post.percemtage_discount}}</p>
+        <p>{{post.new_price}}</p>
+        <p>{{post.installment_price}}</p>
+        <p>{{post.fees}}</p>
+        <p>{{post.offer_validity}}</p>
   
         <div class="card-actions">
           <!-- SERA O LINK DO WHATSAPP-->
