@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-url = 'http://vitrine.jmahfuz.com.br/produto/5164/micro-ondas-panasonic-nn-st25l-dia-a-dia-21-litros-branco.html'
-def scrape_product(url = url):
+
+def scrape_product(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
         'Language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
@@ -42,6 +42,8 @@ def scrape_product(url = url):
         raise Exception(f"Erro ao acessar a URL: {str(e)}")
     except ValueError as e:
         raise Exception(f"Erro ao extrair dados: {str(e)}")
+    
+
 
 
 
