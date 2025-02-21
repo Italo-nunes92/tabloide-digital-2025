@@ -25,16 +25,16 @@
         <p class="card-content">
           {{product.excerpt}}        
         </p>
-        <p>{{product.get_old_price}}</p>
-        <p>{{product.percentage_discount}}</p>
-        <p>{{product.get_new_price}}</p>
-        <p>{{product.installment_price}}</p>
-        <p>{{product.fees}}</p>
-        <p>{{product.offer_validity}}</p>
+        <p>De: R${{product.get_old_price}}</p>
+        <p>Desconto: {{product.percentage_discount}}</p>
+        <p>Por: R${{product.get_new_price}}</p>
+        <p>12x de R${{product.installment_price}}</p>
+        <p>Total R${{product.fees}} com juros</p>
+        <p>Validade da ofertas</br>{{product.offer_validity}}</p>
   
         <div class="card-actions">
           <!-- SERA O LINK DO WHATSAPP-->
-          <a class="card-action-link" href="{{product.whatsapp}}" target="_blank">
+          <a class="card-action-link" href="{{loja.Store.whatsapp}}" target="_blank">
             <i class="fa-brands fa-whatsapp"></i>
             <span>WhatsApp</span>
             

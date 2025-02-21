@@ -48,7 +48,7 @@ class ProductAdmin(SummernoteModelAdmin):
     summernote_fields = 'content',
     list_display = 'pk', 'title', 'new_price', 'offer_validity', 'is_published',
     list_display_links = 'title',
-    search_fields = 'pk', 'title', 'new_price:', 'offer_validity', 'is_published',
+    search_fields = 'pk', 'title', 'new_price', 'offer_validity', 'is_published',
     list_per_page = 50
     list_filter = 'is_published', 'category',
     list_editable = 'is_published', 'offer_validity',

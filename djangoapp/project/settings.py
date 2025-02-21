@@ -84,6 +84,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'site_setup.context_processors.example',
                 'site_setup.context_processors.site_setup',
+                'site_setup.context_processors.store_selection',
                 
             ],
         },

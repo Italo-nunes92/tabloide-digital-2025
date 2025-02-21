@@ -31,7 +31,7 @@ def scrape_product(url):
         
         product_data = {
             'title': title.text.strip(),
-            'description': f'{description}',
+            'description': f'{description}'.replace('','"').replace('','"'),
             'img': f'https:{img}',
             
         }

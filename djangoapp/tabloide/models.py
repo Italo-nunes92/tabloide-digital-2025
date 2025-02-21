@@ -199,7 +199,7 @@ class Product(models.Model):
         return self.format_brazilian_decimal(value) + '%'
     
     def fees(self):
-        value =  round(self.new_price / 10 * 12)
+        value =  round(self.new_price / 10 * 12, 2)
         return self.format_brazilian_decimal(value)
 
     def get_absolute_url(self):
@@ -237,7 +237,7 @@ class Store(models.Model):
     objects = PostManager()
     number_store = models.IntegerField(verbose_name='Numero da Loja')
     title = models.CharField(max_length=50, verbose_name='Nome da Loja')
-    phone_number = models.IntegerField(verbose_name='WhatsApp')
+    phone_number = models.CharField(verbose_name='WhatsApp', max_length=11, blank=True, null=True, default='')
     text = models.TextField(max_length=255, verbose_name='Mensagem WhatsApp', blank=True, null=True, default='Estou interessado no produto: ')
     store_manager = models.CharField(max_length=100, verbose_name='Gerente')
     
