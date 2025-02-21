@@ -14,7 +14,7 @@
         <div class="post-meta-item">
           <i class="fa-solid fa-calendar-days"></i>
           <span>
-            Oferta válida até {{ product.updated_at | date:'d/m/Y' }}
+            Oferta válida até {{product.offer_validity}}
           </span>
         </div>
         {% if product.category %}
