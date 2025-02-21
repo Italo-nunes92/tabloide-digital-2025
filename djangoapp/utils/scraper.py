@@ -44,6 +44,6 @@ def scrape_product(url):
         raise Exception(f"Erro ao extrair dados: {str(e)}")
     
 
-print(scrape_product('http://vitrine.jmahfuz.com.br/produto/5104/escrivaninha-e-penteadeira-de-canto-mobler-star-espelho-1-porta-freijo-offwhite.html').get('img'))
+# print(scrape_product('http://vitrine.jmahfuz.com.br/produto/5104/escrivaninha-e-penteadeira-de-canto-mobler-star-espelho-1-porta-freijo-offwhite.html').get('img'))
 
 

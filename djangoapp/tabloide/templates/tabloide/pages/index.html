@@ -7,15 +7,15 @@
         {% if object_list %}
           <div class="card-grid">
             {% for product in object_list %}
-             {% include 'tabloide/partials/_post-card.html' with i=forloop.counter0 %}
+              {% if product.offer_validity >= date  %}
+                {% include 'tabloide/partials/_post-card.html' with i=forloop.counter0 %}
+              {% endif %}
             {% endfor %}
            </div>
         {% else %}  
           <h1 class="center">Produto não Encontrado</h1>
           <p class="center">Sua busca não obteve resultados, verifique se tem algum erro ou volte a página principal&nbsp;<a href="/">home</a></p>
-          <div>
-            {{ valor_soma }}
-          </div>
+          
           
         {% endif %}
         

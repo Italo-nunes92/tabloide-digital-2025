@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.core.exceptions import ValidationError
 
 
+
 class PostAttachment(AbstractAttachment):
     def save(self, *args, **kwargs):
         if not self.name:
@@ -118,25 +119,24 @@ class Product(models.Model):
         null=False,
         default=None,
     )
-    title = models.CharField(max_length=50, name='Nome do Produto', verbose_name='Produto')
+    title = models.CharField(max_length=50, verbose_name='Produto')
     slug = models.SlugField(
         max_length=50,
         unique=True,
-        default="",
+        default=None,
         blank=False,
         null=False,
     )
-    excerpt = models.CharField(max_length=150, name='Descrição curta', verbose_name='Descrição curta')
+    excerpt = models.CharField(max_length=150, verbose_name='Descrição curta')
     cover = models.URLField(max_length=255, blank=True, null=True, default='')
     vitrine_link = models.URLField(blank=True, default='', null=True, max_length=255)
     is_published = models.BooleanField(
         default=True,
         help_text='Esse campo deve ser marcado para tornar o post publico',
     )
-    old_price = models.FloatField(name='Preço De:', verbose_name='Preço De:')
-    new_price = models.FloatField(name='Preço Por:', verbose_name='Preço Por:')    
+    old_price = models.FloatField(verbose_name='Preço De:')
+    new_price = models.FloatField(verbose_name='Preço Por:')    
     offer_validity = models.DateField(
-        name='Validade da oferta',
         verbose_name='Validade da oferta',
         blank=True,
         null=True,
@@ -158,25 +158,54 @@ class Product(models.Model):
         related_name='post_updated_by',
     )
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True, default=None,
-        name='Categoria', verbose_name='Categoria'
+        Category, on_delete=models.SET_NULL, null=True, blank=True, default=None, verbose_name='Categoria'
     )
     tags = models.ManyToManyField(Tag, blank=True, default='')
     
-    def installment_price(self):
-        return round(self.new_price / 10, 2)
+    def format_brazilian_decimal(self,value):
+        """
+        Formats decimal number to Brazilian standard
+        Example: 1234.56 -> 1.234,56
+        """
+        if not value:
+            return '0,00'
+        
+        # Convert to string with 2 decimal places
+        formatted = '{:.2f}'.format(float(value))
+        
+        # Split integer and decimal parts
+        integer_part, decimal_part = formatted.split('.')
+        
+        # Add thousand separators
+        integer_part = '{:,}'.format(int(integer_part)).replace(',', '.')
+        
+        # Join with Brazilian decimal separator
+        return f'{integer_part},{decimal_part}'
+        
+    def get_old_price(self):
+        value = self.old_price
+        return self.format_brazilian_decimal(value)
     
-    def percemtage_discount(self):
-        return round(100 - (self.new_price / self.old_price * 100), 2)
+    def get_new_price(self):
+        value = self.new_price
+        return self.format_brazilian_decimal(value)
+    
+    def installment_price(self):
+        value = round(self.new_price / 10, 2)
+        return self.format_brazilian_decimal(value)
+    
+    def percentage_discount(self):
+        value = round(100 - (self.new_price / self.old_price * 100), 2) 
+        return self.format_brazilian_decimal(value) + '%'
     
     def fees(self):
-        return round(self.installment_price() * 12)
-    
+        value =  round(self.new_price / 10 * 12)
+        return self.format_brazilian_decimal(value)
+
     def get_absolute_url(self):
         if not self.is_published:
             return reverse("tabloide:index")
-        
-        return reverse("tabloide:post", args=(self.slug,))
+        return reverse("tabloide:product", args=(self.slug,))
     
     def __str__(self):
         return self.title
@@ -188,6 +217,7 @@ class Product(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__original_pk = self.pk
+        return super().__init__(*args, **kwargs)
     
     def save(self, *args, **kwargs):
         self.clean()

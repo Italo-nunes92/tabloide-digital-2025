@@ -1,0 +1,5 @@
+valor = 2.2
+
+print('{:.2f}'.format(valor))
+
+#formatar em valor decimal com duas casas

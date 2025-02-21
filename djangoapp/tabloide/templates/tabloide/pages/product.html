@@ -1,0 +1,59 @@
+{% extends 'tabloide/base.html' %} 
+
+{% block content %}
+<main class="main-content single-product section-wrapper">
+  <div class="single-product-content section-content-narrow">
+    <div class="single-product-gap section-gap">
+      {% if product.tags.exists %}
+      
+      {% endif %}
+      <div class="single-product-cover pb-base" >
+        <img  loading="lazy" src={{product_values.img}} alt="{{product.category.name}}" >
+      </div>     
+      <div class="post-meta pb-base">
+        <div class="post-meta-item">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>
+            Oferta válida até {{ product.updated_at | date:'d/m/Y' }}
+          </span>
+        </div>
+        {% if product.category %}
+        <div class="post-meta-item">
+          <a class="post-meta-link" href="{% url 'tabloide:category' product.category.slug %}">
+            <i class="fa-solid fa-tag"></i>
+            <span>
+              {{ product.category.name }}
+            </span>
+          </a>
+        </div>
+        {% endif %}
+      </div>
+      
+      <h2 class="single-product-title pb-base center">
+        {{product_values.title}}
+      </h2>
+
+      {{product.content|safe}}
+
+      <div class="separator"></div>
+      
+
+      <div class="jm_novo">
+        {{product_values.description|safe}}        
+      
+      </div>
+      <div class="product-tags">
+        <span>Tags: </span>
+        {% for tag in product.tags.all %}
+          <a class="product-tag-link" href="{% url 'tabloide:tag' tag.slug %}">
+            <i class="fa-solid fa-circle-right"></i>
+            <span>{{ tag.name }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    
+    </div>
+  </div>
+</main>
+
+{% endblock content %}

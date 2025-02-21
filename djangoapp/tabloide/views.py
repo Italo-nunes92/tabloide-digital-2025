@@ -3,8 +3,8 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from django.http import Http404
 from django.views.generic import ListView, DetailView
-from utils.soma import somar
 from utils.scraper import scrape_product
+from datetime import datetime, date
 
 PER_PAGE = 9
 
@@ -12,16 +12,19 @@ class ProductListView(ListView):
     template_name = 'tabloide/pages/index.html'
     paginate_by = PER_PAGE
     queryset = Product.objects.get_published()
+   
      
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
             {
                 'page_title': 'Home | ',
-                'valor_soma': somar(900.0, 1200.0),
+                'date': datetime.now().date(),
             }
         )
+        print(context)
         return context
+    
 
 class TagListView(ProductListView):
     allow_empty = False
@@ -53,8 +56,7 @@ class SearchListView(ProductListView):
         qs = super().get_queryset()
         qs = qs.filter(
             Q(title__icontains=self._search_value) |
-            Q(excerpt__icontains=self._search_value) |
-            Q(content__icontains=self._search_value)
+            Q(excerpt__icontains=self._search_value)
         )[0:PER_PAGE]
         return qs
     
@@ -73,20 +75,38 @@ class SearchListView(ProductListView):
         if self._search_value == '':
             return redirect('tabloide:index')
         return super().get(request, *args, **kwargs)
+    
+class CategoryPostView(ProductListView):
+    allow_empty = False
+    def get_queryset(self):
+        qs = super().get_queryset()
+        qs = qs.filter(category__slug=self.kwargs.get('slug'))
+                
+        return qs
+        
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_title = f'{self.object_list[0].category.name} | '
+        context.update(
+            {
+                'page_title': page_title,
+            }
+        )        
+        return context
 
 class ProductView(DetailView):
     model = Product
-    template_name = 'tabloide/pages/post.html'
+    template_name = 'tabloide/pages/product.html'
     context_object_name = 'product'
     
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        post = self.get_object()
-        page_title = f'{post.title} | '
+        product = self.get_object()
+        page_title = f'{product.title} | '
         ctx.update(
             {
                 'page_title': page_title,
-                'product_values': scrape_product(post.vitrine_link),
+                'product_values': scrape_product(product.vitrine_link),
             }
         )
         return ctx

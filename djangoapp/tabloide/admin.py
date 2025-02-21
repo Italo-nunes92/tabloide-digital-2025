@@ -46,18 +46,18 @@ class PageAdmin(SummernoteModelAdmin):
 @admin.register(Product)
 class ProductAdmin(SummernoteModelAdmin):
     summernote_fields = 'content',
-    list_display = 'pk', 'Nome do Produto', 'Preço Por:', 'Validade da oferta', 'is_published',
-    list_display_links = 'Nome do Produto',
-    search_fields = 'pk', 'title', 'new_price', 'Validade da oferta', 'is_published',
+    list_display = 'pk', 'title', 'new_price', 'offer_validity', 'is_published',
+    list_display_links = 'title',
+    search_fields = 'pk', 'title', 'new_price:', 'offer_validity', 'is_published',
     list_per_page = 50
-    list_filter = 'is_published', 'Categoria',
-    list_editable = 'is_published', 'Validade da oferta',
-    ordering = 'Validade da oferta',
+    list_filter = 'is_published', 'category',
+    list_editable = 'is_published', 'offer_validity',
+    ordering = 'offer_validity',
     prepopulated_fields = {
-        'slug': ('Nome do Produto',)
+        'slug': ('title',)
     }
     readonly_fields = 'created_at', 'updated_at','updated_by','created_by','link',
-    autocomplete_fields = 'tags', 'Categoria',
+    autocomplete_fields = 'tags', 'category',
     
     
     def link(self, obj):
