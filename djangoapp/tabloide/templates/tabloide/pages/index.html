@@ -4,20 +4,15 @@
   <main class="main-content section-wrapper">
     <div class="section-content-wide">
       <div class="section-gap">
-        {% if object_list %}
-          <div class="card-grid">
-            {% for product in object_list %}
-              {% if product.offer_validity >= date  %}
-                {% include 'tabloide/partials/_post-card.html' with i=forloop.counter0 %}
-              {% endif %}
+        <form class="search-content" method="POST" >
+          {% csrf_token %}
+          <select class="search-input" name="store" id="pk" onchange="this.form.submit()">
+            {% for cidade in form.store %}
+              {{cidade}}
             {% endfor %}
-           </div>
-        {% else %}  
-          <h1 class="center">Produto não Encontrado</h1>
-          <p class="center">Sua busca não obteve resultados, verifique se tem algum erro ou volte a página principal&nbsp;<a href="/">home</a></p>
-          
-          
-        {% endif %}
+          </select>
+        </form>
+       
         
 
       </div>

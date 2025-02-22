@@ -13,9 +13,3 @@ def site_setup(request):
         
     }
     
-def store_selection(request):
-    stores = Store.objects.all()
-    
-    return {
-        'stores_test': stores
-    }

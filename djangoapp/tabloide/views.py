@@ -1,35 +1,28 @@
-from tabloide.models import Product, Store
+from tabloide.models import Product
 from tabloide.form import StoreForm
 from django.shortcuts import redirect, render
 from django.db.models import Q
 from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 from utils.scraper import scrape_product
 from datetime import datetime, date
 
 PER_PAGE = 9
 
 class ProductListView(ListView):
-    template_name = 'tabloide/pages/index.html'
+    template_name = 'tabloide/pages/tabloide.html'
     paginate_by = PER_PAGE
     queryset = Product.objects.get_published()
-
-    
- 
-
-     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        loja = self.request.GET.get('store')
-        loja_escolhida = Store.objects.filter(title=loja).first()
+        number = self.request.session.get('number', 0)
         context.update(
             {
                 'page_title': 'Home | ',
                 'date': datetime.now().date(),
-                'loja': loja_escolhida
+                'whatsapp': number
             }
         )
-        print(type(loja_escolhida))
         return context
     
 
@@ -123,28 +116,14 @@ class ProductView(DetailView):
     def get_queryset(self):
         return super().get_queryset().filter(is_published=True)
     
-# class StoreSelectionView(View):
-#     template_name = 'tabloide/pages/index.html'
-#     form_class = StoreForm
+class SelecionarCidadeView(FormView):
+    template_name = 'tabloide/pages/index.html'
+    form_class = StoreForm
+    success_url = 'tabloide/'
     
-#     def get(self, request, *args, **kwargs):
-#         form = self.form_class()
-#         print("Esse aqui")
-        
-#         return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        cidade = form.cleaned_data['store']
+        number = cidade.text_link
+        self.request.session['number'] = number
+        return super().form_valid(form)
     
-#     def post(self, request, *args, **kwargs):
-#         form = self.form_class(request.POST)
-#         if form.is_valid():
-#             store = form.cleaned_data['title']
-#             return redirect('tabloide:city_results', store=store.number)
-#         return render(request, self.template_name, {'form': form})
-    
-    
-# class StoreResultView(View):
-#     template_name = 'tabloide/pages/index.html'
-
-#     def get(self, request, store, *args, **kwargs):
-#         stores = Store.objects.filter(store=store)
-#         context = {'stores': stores, 'selected_city': store}
-#         return render(request, self.template_name, context)

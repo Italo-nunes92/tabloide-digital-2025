@@ -161,6 +161,13 @@ class Product(models.Model):
         Category, on_delete=models.SET_NULL, null=True, blank=True, default=None, verbose_name='Categoria'
     )
     tags = models.ManyToManyField(Tag, blank=True, default='')
+    text_link = models.CharField(max_length=255, blank=True, null=True, default='', editable=False )
+    
+    
+    def format_to_link(self):
+        
+        
+        return '%20' + self.title.replace(' ', '%20')
     
     def format_brazilian_decimal(self,value):
         """
@@ -210,6 +217,7 @@ class Product(models.Model):
     def __str__(self):
         return self.title
     
+    
     def clean(self):
         if not self._state.adding and self.pk != self.__original_pk:
             raise ValidationError({'Código': 'O valor do Código não pode ser alterado após a criação.'})
@@ -222,6 +230,8 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         self.cover = scrape_product(self.vitrine_link).get('img')
+        
+        self.text_link = self.format_to_link()
 
         if not self.slug:
             self.slug = slygify_new(self.title, 5)
@@ -240,15 +250,19 @@ class Store(models.Model):
     phone_number = models.CharField(verbose_name='WhatsApp', max_length=11, blank=True, null=True, default='')
     text = models.TextField(max_length=255, verbose_name='Mensagem WhatsApp', blank=True, null=True, default='Estou interessado no produto: ')
     store_manager = models.CharField(max_length=100, verbose_name='Gerente')
-    
-    def whatsapp(self, text = None):
+    text_link = models.TextField(max_length=255, default='', null=True, blank=True)
+    def whatsapp(self):
         number = f'55{str(self.phone_number)}'
-                
-        if text is None: text = f"Estou interessado no produto {self.title}."
-        else: text = f"{text} {self.title}. "
+        text = self.text
         
         link = f"https://wa.me/{number}?text={text.replace(' ', '%20')}"
         return link
+    
+    def save(self, *args, **kwargs):
+        
+        self.text_link = self.whatsapp()
+        
+        return super().save(*args, **kwargs)
     
     def __str__(self):
         return self.title

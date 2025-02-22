@@ -9,7 +9,7 @@
         <p class="blog-description pb-base center">{{site_setup.description}}</p>
       {% endif %}
 
-      {% if site_setup.show_search %}
+      {% if site_setup.show_search and object_list %}
         <div class="search pb-base center">
           <form class="search-form" action="{% url 'tabloide:search' %}" method="get">
             <div class="search-content">
@@ -32,15 +32,7 @@
           
         
       {% endif %}
-      <form class="search-content" method="GET" action="{% url 'tabloide:index' %}">
-        {% csrf_token %}
-        <select class="search-input" name="store" onchange="this.form.submit()">
-          <option value="">Selecione a cidade</option>
-          {% for city in stores_test %}
-            <option value="{{ city }}">{{ city }}</option>
-          {% endfor %}
-        </select>
-      </form>
+     
 
       {% if site_setup.show_menu %}
         <nav class="menu">

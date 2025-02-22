@@ -59,6 +59,8 @@ class ProductAdmin(SummernoteModelAdmin):
     readonly_fields = 'created_at', 'updated_at','updated_by','created_by','link',
     autocomplete_fields = 'tags', 'category',
     
+    hidden_fields = 'text_link',
+    
     
     def link(self, obj):
         if not obj.pk:
@@ -86,3 +88,4 @@ class StoreAdmin(admin.ModelAdmin):
     search_fields = 'id','number_store', 'title', 'phone_number','store_manager',
     list_per_page = 40
     ordering = '-pk',
+    readonly_fields = 'text_link',
