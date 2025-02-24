@@ -83,9 +83,9 @@ class ProductAdmin(SummernoteModelAdmin):
         
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
-    list_display = 'id','number_store', 'title', 'phone_number','store_manager',
+    list_display = 'number_store', 'title', 'phone_number','store_manager',
     list_display_links = 'title',
-    search_fields = 'id','number_store', 'title', 'phone_number','store_manager',
+    search_fields = 'number_store', 'title', 'phone_number','store_manager',
     list_per_page = 40
-    ordering = '-pk',
+    ordering = 'pk',
     readonly_fields = 'text_link',

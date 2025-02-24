@@ -245,7 +245,7 @@ class Store(models.Model):
         verbose_name_plural = 'Lojas'
 
     objects = PostManager()
-    number_store = models.IntegerField(verbose_name='Numero da Loja')
+    number_store = models.IntegerField(verbose_name='Numero da Loja', primary_key=True, unique=True, editable=True)
     title = models.CharField(max_length=50, verbose_name='Nome da Loja')
     phone_number = models.CharField(verbose_name='WhatsApp', max_length=11, blank=True, null=True, default='')
     text = models.TextField(max_length=255, verbose_name='Mensagem WhatsApp', blank=True, null=True, default='Estou interessado no produto: ')
