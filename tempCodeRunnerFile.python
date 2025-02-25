@@ -1,5 +1,12 @@
-valor = 2.2
+def valor(N):
+    ...
+    
+    
+    
+    
+T = int(input())
 
-print('{:.2f}'.format(valor))
-
-#formatar em valor decimal com duas casas
+for _ in range(T):
+    N = int(input())
+    out_ = valor(N)
+    print(out_)

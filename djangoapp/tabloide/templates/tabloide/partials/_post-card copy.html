@@ -1,46 +1,46 @@
 <article class="card">
-    {% if product.cover %}
-      <div class="card-cover-wrapper">
-        <a href="{{product.get_absolute_url}}" class="card-cover-link">
-          <img 
-            class="card-cover"
-            loading="lazy"
-            src={{product.cover}} 
-            alt="Foto {{product.title}}"
-          >
+  {% if product.cover %}
+  <div class="card-cover-wrapper">
+    <a href="{{product.get_absolute_url}}" class="card-cover-link">
+      <img 
+      class="card-cover"
+      loading="lazy"
+      src={{product.cover}} 
+      alt="Foto {{product.title}}"
+      >
+    </a>
+  </div>
+  {% endif %}
+  
+  <div class="card-text-wrapper">
+    <div class="card-title-wrapper">
+      <h2 class="card-title">
+        <a href="{{product.get_absolute_url}}" class="card-title-link">
+          {{product.title}}
         </a>
-      </div>
-    {% endif %}
-  
-    <div class="card-text-wrapper">
-      <div class="card-title-wrapper">
-        <h2 class="card-title">
-          <a href="{{product.get_absolute_url}}" class="card-title-link">
-            {{product.title}}
-          </a>
-        </h2>
-      </div>
-  
-      <div class="card-content-wrapper">
-        <p class="card-content">
-          {{product.excerpt}}        
-        </p>
-        <p>De: R${{product.get_old_price}}</p>
-        <p>Desconto: {{product.percentage_discount}}</p>
-        <p>Por: R${{product.get_new_price}}</p>
-        <p>12x de R${{product.installment_price}}</p>
-        <p>Total R${{product.fees}} com juros</p>
-        <p>Validade da ofertas</br>{{product.offer_validity}}</p>
-  
-        <div class="card-actions">
-          <!-- SERA O LINK DO WHATSAPP-->
-          <a class="card-action-link" href="{{whatsapp}}{{product.text_link}}" target="_blank">
-            <i class="fa-brands fa-whatsapp"></i>
-            <span>WhatsApp</span>
-            
-          </a>
-        </div>  
-      </div>
+      </h2>
     </div>
+    
+    <div class="card-content-wrapper">
+      <p class="card-content">
+        {{product.excerpt}}        
+      </p>
+      <p>De: R${{product.get_old_price}}</p>
+      <p>Desconto: {{product.percentage_discount}}</p>
+      <p>Por: R${{product.get_new_price}}</p>
+      <p>12x de R${{product.installment_price}}</p>
+      <p>Total R${{product.fees}} com juros</p>
+      <p>Validade da ofertas</br>{{product.offer_validity}}</p>
+      
+      <div class="card-actions">
+        <!-- SERA O LINK DO WHATSAPP-->
+        <a class="card-action-link" href="{{whatsapp}}{{product.text_link}}" target="_blank">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>WhatsApp</span>
+          
+        </a>
+      </div>  
+    </div>
+  </div>
   
-  </article>
+</article>

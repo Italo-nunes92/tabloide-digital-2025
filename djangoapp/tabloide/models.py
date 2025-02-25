@@ -199,7 +199,7 @@ class Product(models.Model):
     
     def installment_price(self):
         value = round(self.new_price / 10, 2)
-        return self.format_brazilian_decimal(value)
+        return self.format_brazilian_decimal(value).split(',')
     
     def percentage_discount(self):
         value = round(100 - (self.new_price / self.old_price * 100), 2) 
