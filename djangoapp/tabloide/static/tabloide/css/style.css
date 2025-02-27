@@ -127,7 +127,6 @@ html,
   max-width: 100%;
   justify-content: center;
   transition: ease-in-out 0.3s;
-  box-shadow: #0400ff4d 0px 0px 1px;
 }
 .blog-link svg:hover {
   scale: 1.03;
@@ -598,10 +597,10 @@ img {
   height: 30px;
   width:  100%; ;
   max-width: 100%;
-  bottom: 0;
+  bottom: 0px;
   justify-self: center;
   justify-content: space-between;
-  padding: 2%;
+  padding: 25px 0;
 }
 
 .nav-selling p {
