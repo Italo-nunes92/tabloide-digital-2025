@@ -1,9 +1,13 @@
 
 <article class="card">
 
+    
+
     {% if product.cover %}
     <div class="card-cover-wrapper">
+       
         <a href="{{product.get_absolute_url}}" class="card-cover-link">
+            <div class="offer-percent">{{product.percentage_discount}} OFF</div>
             <img class="card-cover" loading="lazy"
             src="{{product.cover}}"
             alt="Foto {{product.title}}">
@@ -13,7 +17,7 @@
    
 
     <div class="card-text-wrapper">
-        <div class="card-title-wrapper">
+        <div class="card-title-wrapper" onclick="window.location.href='{{product.get_absolute_url}}';">
             <h2 class="card-title">
                 <a href="{{product.get_absolute_url}}" class="card-title-link">
                     {{product.title}}
@@ -38,9 +42,9 @@
             
             
             <div class="card-installment-wrapper">
-                <span>ou no cartão em 12x:<br></span>
+                <span class ="text-installment-top">ou no cartão em 12x:<br></span>
                 <b class="inst"><sub>R$ </sub>{{product.installment_price.0}}<sup>,{{product.installment_price.1}}</sup></b><br>
-                <span>Total <b>R$ {{product.fees}}</b> com juros.</span>
+                <span class ="text-installment-bottom">Total <b>R$ {{product.fees}}</b> com juros.</span>
             </div>
             
         </div>

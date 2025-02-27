@@ -25,7 +25,7 @@
   --clr-gray-dkst: var(--_clr-gray) 10%;
   
   /* Font-family */
-  --ff-regular: Roboto, 'Open Sans', Lato, Poppins, Montserrat;
+  --ff-regular: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --ff-headings: 'Playfair Display', Merriweather, Lora, 'PT Serif';
   --ff-mono: 'Courier New', Courier, monospace;
   
@@ -365,6 +365,7 @@ img {
 .card-text-wrapper {
   padding: var(--spacing-micro);
   padding-top: 0;
+  
 
 }
 
@@ -388,6 +389,15 @@ img {
   background-color: rgba(0, 0, 0, 0.1);
   align-content: center;
   border-radius: 5px;
+  min-height: 100px;
+  
+  
+}
+
+.card-title-wrapper:hover{
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
   
 }
 
@@ -435,11 +445,12 @@ img {
 .card-price-wrapper hr {
   width: 70%;
   margin: 0 auto;
+  
 }
 
 /* Preço à vista */
 .card-price-wrapper b{
-  font-size: 125%;
+  font-size: 140%;
   color: #096b00;
   white-space: nowrap;
 }
@@ -455,7 +466,7 @@ img {
 }
 
 .card-installment-wrapper {
-  font-size: var(--fs-sm);
+  font-size: var(--fs-base);
   text-align: center;
   border: #096b00 solid 2px;
   border-radius: 7px;
@@ -466,9 +477,10 @@ img {
 .inst {
   color: #a00000;
   font-size: 6.8rem;
-  line-height: 70%;
+  line-height: 50%;
   white-space: nowrap;
-
+  letter-spacing: -2px;
+  vertical-align:-10%;
   
 }
 
@@ -482,12 +494,21 @@ img {
   vertical-align: baseline;
 }
 
-.card-installment-wrapper span{
-  font-size: 80%;
+.text-installment-top {
+  font-size: 85%;
   color: #000000;
   white-space: nowrap;
-  line-height: 60%;
+  line-height: 100%;
+  vertical-align:25%;
 }
+
+.text-installment-bottom {
+  font-size: 75%;
+  color: #000000;
+  white-space: nowrap;
+  
+}
+
 
 
 .card-offer-wrapper p{
@@ -515,6 +536,8 @@ img {
   height: 100%;
   border-radius: 20px;
   align-content: center;
+  flex-direction: column;
+  ;
   
   
 }
@@ -526,8 +549,33 @@ img {
 .offer-validity {
   white-space: nowrap;
   font-size: 70%;
-  text-align: center;  
+  text-align: center;
+  padding-bottom: 5px;
 }
+
+/* colocar a offer-percent dentro do card-actions e acima do card*/
+.offer-percent {
+  float:right;
+  display: flex;
+  
+  position: absolute; /* Changed from sticky to absolute */
+  z-index: 10;        /* Increased z-index to ensure it's on top */
+  width: auto;       /* Changed to auto to fit content */
+  height: auto;      /* Changed to auto to fit content */
+  padding: 0.2rem 0.5rem;    /* Added padding for better appearance */
+  background-color: #a00000;
+  justify-content: center;
+  align-items: center; /*Vertically aligns items*/
+  color: #ffffff;
+  border-radius: 5px 0 0 0;
+  font-weight: bold;
+  font-size: var(--fs-smlr);
+  margin: 0 0 0 auto;
+}
+
+
+
+
 
 .jm_novo {
 
@@ -535,7 +583,7 @@ img {
     display: inline;
     float: left;
     color: #707070;
-    font-family: 'AlwynNew', Arial;
+    /* font-family: 'AlwynNew', Arial; */
     font-size: 26px;
     font-weight: bold;
     margin: 0 0.833333%;
