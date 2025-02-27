@@ -72,9 +72,13 @@
 html {
   font-size: 62.5%;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
 
 body {
-  background-color: rgb(255, 255, 255);
+  background-color:#ffffff;
   color: rgb(65, 65, 65);
   font-size: 20px; /* Fallback value */
   font-size: var(--fs-base);
@@ -118,6 +122,17 @@ html,
 .blog-wrapper {
   display: flex;
   flex-direction: column;
+}
+.blog-link svg {
+  max-width: 100%;
+  justify-content: center;
+  transition: ease-in-out 0.3s;
+  box-shadow: #0400ff4d 0px 0px 1px;
+}
+.blog-link svg:hover {
+  scale: 1.03;
+  transition: ease-in-out 0.3s;
+  box-shadow: #0000004d 0px 0px 10px;
 }
 
 .main-content {
@@ -251,8 +266,8 @@ img {
 }
 
 .footer {
-  background: hsl(var(--clr-gray-dk));
-  color: hsl(var(--clr-white));
+  background: #2b3990;
+  color: #2b3990;
 }
 
 .footer a {
@@ -327,16 +342,18 @@ img {
 }
 
 .card {
-  border: 1px solid hsl(var(--clr-gray-ltst));
-  border-radius: var(--br-base);
-  box-shadow: 0 5px 5px hsl(var(--clr-black) / 0.1);
+  border: 0px solid rgb(2, 89, 202);
+  border-radius: 10px;
+  box-shadow: 0 0px 5px rgb(2, 89, 202) ;
   transition: scale 300ms ease-in-out, box-shadow 300ms ease-in-out;
+  background-color: hsl(var(--clr-white));
+
   
   
 }
 .card:hover {
   scale: 1.02;
-  box-shadow: 0 5px 15px hsl(var(--clr-black) / 0.3);
+  box-shadow: 0 0px 15px rgb(2, 89, 202);
 }
 
 
@@ -468,7 +485,7 @@ img {
 .card-installment-wrapper {
   font-size: var(--fs-base);
   text-align: center;
-  border: #096b00 solid 2px;
+  border: #bd0000 solid 2px;
   border-radius: 7px;
   width: 100%;
   
@@ -573,6 +590,47 @@ img {
   margin: 0 0 0 auto;
 }
 
+.nav-selling {
+  position:sticky;
+  z-index: 9999;
+  display: flex;
+  background-color: #ffffff;
+  height: 30px;
+  width:  100%; ;
+  max-width: 100%;
+  bottom: 0;
+  justify-self: center;
+  justify-content: space-between;
+  padding: 2%;
+}
+
+.nav-selling p {
+  text-decoration: none;
+  border: 1px solid #005acf;
+  width: 100%;
+  height: 100%;
+  border-radius: 30px;
+  align-content: center;
+  flex-direction: row;
+  text-align: center;
+  padding: 0 50%;
+  margin: auto 0;
+
+
+}
+
+.card-action-nav {
+  text-decoration: none;
+  color: #ffffff;
+  background-color: green;
+  height: 100%;
+  border-radius: 30px;
+  flex-direction: row;
+  text-align: center; 
+  padding: 0 5%;
+  
+  
+}
 
 
 

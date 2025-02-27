@@ -3,7 +3,9 @@
     <div class="section-gap">
   
       <h1 class="blog-title center pb-base">
-        <a class="blog-link" href="/"> {{site_setup.title}} </a>
+        <a class="blog-link" href="/">
+        {% include "tabloide/partials/_logo.svg" %}
+      </a>
       </h1>
       {% if site_setup.show_description %}
         <p class="blog-description pb-base center">{{site_setup.description}}</p>

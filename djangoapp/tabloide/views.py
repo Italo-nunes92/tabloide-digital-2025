@@ -105,10 +105,12 @@ class ProductView(DetailView):
         ctx = super().get_context_data(**kwargs)
         product = self.get_object()
         page_title = f'{product.title} | '
+        number = self.request.session.get('number', 0)
         ctx.update(
             {
                 'page_title': page_title,
                 'product_values': scrape_product(product.vitrine_link),
+                'whatsapp': number,
             }
         )
         return ctx

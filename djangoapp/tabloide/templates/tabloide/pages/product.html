@@ -4,9 +4,7 @@
 <main class="main-content single-product section-wrapper">
   <div class="single-product-content section-content-narrow">
     <div class="single-product-gap section-gap">
-      {% if product.tags.exists %}
-      
-      {% endif %}
+   
       <div class="single-product-cover pb-base" >
         <img  loading="lazy" src={{product_values.img}} alt="{{product.category.name}}" >
       </div>     
@@ -49,11 +47,21 @@
             <i class="fa-solid fa-circle-right"></i>
             <span>{{ tag.name }}</span>
           </a>
+          
         {% endfor %}
+        
       </div>
+      <div class="nav-selling"> 
+        <a href="/tabloide"><p>Voltar</p></a>
+        <a class="card-action-nav" href="{{whatsapp}}{{product.text_link}}" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i>
+        <span><b>Compre Agora!</b></span>
+        
+    </a></div>
     
     </div>
   </div>
+  
 </main>
 
 {% endblock content %}
